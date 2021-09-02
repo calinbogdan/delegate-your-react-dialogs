@@ -26,15 +26,26 @@ const DeleteModal = ({ isOpen, onClose, handleDelete }) => (
   </Modal>
 )
 
-const ContainerComponent = () => {
+const DeleteButton = ({ onClick, ...props }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleDelete = () => {
+    onClose();
+    onClick();
+  }
+
+  return <>
+    <Button onClick={onOpen} {...props}>Delete</Button>
+    <DeleteModal isOpen={isOpen} onClose={onClose} handleDelete={handleDelete} />
+  </>
+}
+
+const ContainerComponent = () => {
 
   const toast = useToast();
 
   const handleDelete = () => {
     // delete logic 
-    onClose();
-
     toast({
       title: "Resource deleted",
       status: "success"
@@ -43,8 +54,7 @@ const ContainerComponent = () => {
 
   return (
     <div>
-      <Button onClick={onOpen}>Delete</Button>
-      <DeleteModal isOpen={isOpen} onClose={onClose} handleDelete={handleDelete} />
+      <DeleteButton onClick={handleDelete} />
     </div>
   )
 }
